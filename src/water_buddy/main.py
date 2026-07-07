@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from water_buddy.config import DRINK_AMOUNT_OPTIONS, DrinkEntry, load_state, now_iso, save_state, total_today_ml
+from water_buddy.config import DRINK_AMOUNT_OPTIONS, DrinkEntry, load_state, now_iso, save_state, today_key, total_today_ml
 from water_buddy.startup import is_startup_enabled, set_startup_enabled
 
 
@@ -130,7 +130,7 @@ class DropletWidget(QWidget):
         self._progress = 0.0
         self._breath = 0.0
         self._wave = 0.0
-        self.setMinimumSize(220, 240)
+        self.setFixedSize(170, 182)
 
         self.progress_anim = QPropertyAnimation(self, b"progress", self)
         self.progress_anim.setDuration(900)
@@ -226,12 +226,13 @@ class DropletWidget(QWidget):
 class WaterBuddyWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
+        self.current_day = today_key()
         self.state = load_state()
         self.state.settings.start_on_boot = is_startup_enabled()
         self.next_reminder_at = datetime.now() + timedelta(minutes=self.state.settings.remind_every_minutes)
         self.setWindowTitle("Water Buddy")
         self.setWindowIcon(self.make_icon())
-        self.setMinimumSize(430, 660)
+        self.setMinimumSize(430, 640)
         self.setStyleSheet(f"QMainWindow {{ background: {BG}; }}")
 
         self.droplet = DropletWidget()
@@ -254,11 +255,11 @@ class WaterBuddyWindow(QMainWindow):
     def setup_ui(self) -> None:
         root = QWidget()
         layout = QVBoxLayout(root)
-        layout.setContentsMargins(28, 26, 28, 24)
-        layout.setSpacing(18)
+        layout.setContentsMargins(28, 20, 28, 18)
+        layout.setSpacing(10)
 
         title = QLabel("喝水小助手")
-        title.setFont(QFont("Microsoft YaHei UI", 24, QFont.Weight.Bold))
+        title.setFont(QFont("Microsoft YaHei UI", 22, QFont.Weight.Bold))
         title.setStyleSheet(f"color: {INK};")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
@@ -268,6 +269,7 @@ class WaterBuddyWindow(QMainWindow):
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         top = QVBoxLayout()
+        top.setSpacing(4)
         top.addWidget(title)
         top.addWidget(subtitle)
         layout.addLayout(top)
@@ -284,7 +286,7 @@ class WaterBuddyWindow(QMainWindow):
         self.total_label.setStyleSheet(f"color: {MUTED};")
         layout.addWidget(self.total_label)
 
-        self.add_button.setMinimumHeight(56)
+        self.add_button.setMinimumHeight(48)
         self.add_button.clicked.connect(self.add_cup)
         layout.addWidget(self.add_button)
 
@@ -295,8 +297,8 @@ class WaterBuddyWindow(QMainWindow):
 
         settings = self.make_card()
         settings_layout = QVBoxLayout(settings)
-        settings_layout.setContentsMargins(18, 16, 18, 16)
-        settings_layout.setSpacing(12)
+        settings_layout.setContentsMargins(16, 12, 16, 12)
+        settings_layout.setSpacing(8)
         settings_layout.addWidget(self.row("每日目标", self.goal_input, 800, 4000, self.state.settings.daily_goal_ml, " ml"))
         settings_layout.addWidget(self.amount_selector())
         settings_layout.addWidget(self.row("提醒间隔", self.interval_input, 15, 180, self.state.settings.remind_every_minutes, " 分钟"))
@@ -311,7 +313,7 @@ class WaterBuddyWindow(QMainWindow):
                 color: {BLUE_DARK};
                 border: 1px solid #c9edf9;
                 border-radius: 18px;
-                padding: 11px 18px;
+                padding: 9px 18px;
                 font-weight: 700;
             }}
             QPushButton:hover {{
@@ -327,9 +329,9 @@ class WaterBuddyWindow(QMainWindow):
 
     def amount_selector(self) -> QWidget:
         wrapper = QWidget()
-        layout = QVBoxLayout(wrapper)
+        layout = QHBoxLayout(wrapper)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(8)
+        layout.setSpacing(10)
         label = QLabel("单次喝水量")
         label.setFont(QFont("Microsoft YaHei UI", 11, QFont.Weight.Bold))
         label.setStyleSheet(f"color: {INK};")
@@ -342,7 +344,7 @@ class WaterBuddyWindow(QMainWindow):
         for index, amount in enumerate(DRINK_AMOUNT_OPTIONS):
             button = QPushButton(f"{amount} ml")
             button.setCheckable(True)
-            button.setMinimumHeight(44)
+            button.setMinimumHeight(34)
             button.setCursor(Qt.CursorShape.PointingHandCursor)
             self.amount_group.addButton(button, index)
             self.amount_buttons.append(button)
@@ -350,6 +352,7 @@ class WaterBuddyWindow(QMainWindow):
             button.clicked.connect(lambda checked=False, value=amount: self.select_amount(value))
 
         layout.addWidget(label)
+        layout.addStretch()
         layout.addWidget(buttons)
         self.sync_amount_buttons()
         return wrapper
@@ -389,7 +392,7 @@ class WaterBuddyWindow(QMainWindow):
         spin.setRange(minimum, maximum)
         spin.setValue(value)
         spin.setSuffix(suffix)
-        spin.setMinimumHeight(38)
+        spin.setMinimumHeight(34)
         spin.setStyleSheet(f"""
             QSpinBox {{
                 background: #f7fbff;
@@ -452,14 +455,16 @@ class WaterBuddyWindow(QMainWindow):
         self.clock_timer.start()
 
     def settings_changed(self) -> None:
+        self.ensure_today()
         self.state.settings.daily_goal_ml = self.goal_input.value()
         self.state.settings.remind_every_minutes = self.interval_input.value()
-        save_state(self.state)
+        save_state(self.state, self.current_day)
         self.refresh(animated=True)
 
     def select_amount(self, amount: int) -> None:
+        self.ensure_today()
         self.state.settings.cup_size_ml = amount
-        save_state(self.state)
+        save_state(self.state, self.current_day)
         self.sync_amount_buttons()
         self.refresh(animated=False)
 
@@ -478,23 +483,26 @@ class WaterBuddyWindow(QMainWindow):
             self.hint_label.setText("开机启动设置失败")
             return
         self.state.settings.start_on_boot = enabled
-        save_state(self.state)
+        save_state(self.state, self.current_day)
         self.refresh_hint()
 
     def add_cup(self) -> None:
+        self.ensure_today()
         self.state.entries.append(DrinkEntry(amount_ml=self.state.settings.cup_size_ml, created_at=now_iso()))
-        save_state(self.state)
+        save_state(self.state, self.current_day)
         self.next_reminder_at = datetime.now() + timedelta(minutes=self.state.settings.remind_every_minutes)
         self.refresh(animated=True)
 
     def pause_reminders(self) -> None:
+        self.ensure_today()
         paused_until = datetime.now() + timedelta(minutes=30)
         self.state.settings.paused_until = paused_until.isoformat(timespec="seconds")
-        save_state(self.state)
+        save_state(self.state, self.current_day)
         self.refresh_hint()
         self.tray.showMessage("Water Buddy", "提醒已暂停 30 分钟。", QSystemTrayIcon.MessageIcon.Information, 2400)
 
     def refresh(self, animated: bool) -> None:
+        self.ensure_today(refresh_after=False)
         total = total_today_ml(self.state)
         goal = max(1, self.state.settings.daily_goal_ml)
         progress = min(1.0, total / goal)
@@ -509,6 +517,7 @@ class WaterBuddyWindow(QMainWindow):
         self.refresh_hint()
 
     def refresh_hint(self) -> None:
+        self.ensure_today(refresh_after=False)
         paused_until = self.get_paused_until()
         if paused_until and paused_until > datetime.now():
             minutes = max(1, math.ceil((paused_until - datetime.now()).total_seconds() / 60))
@@ -522,6 +531,7 @@ class WaterBuddyWindow(QMainWindow):
         self.hint_label.setText(f"下次提醒约 {minutes} 分钟后")
 
     def check_reminder(self) -> None:
+        self.ensure_today()
         if self.in_quiet_hours():
             return
         paused_until = self.get_paused_until()
@@ -532,6 +542,19 @@ class WaterBuddyWindow(QMainWindow):
         self.tray.showMessage("喝点水吧", "离开杯子太久了，补一小口也算数。", QSystemTrayIcon.MessageIcon.Information, 5000)
         self.next_reminder_at = datetime.now() + timedelta(minutes=self.state.settings.remind_every_minutes)
         self.refresh_hint()
+
+    def ensure_today(self, refresh_after: bool = True) -> None:
+        active_day = today_key()
+        if active_day == self.current_day:
+            return
+        previous_settings = self.state.settings
+        self.current_day = active_day
+        self.state = load_state(active_day)
+        self.state.settings = previous_settings
+        self.next_reminder_at = datetime.now() + timedelta(minutes=self.state.settings.remind_every_minutes)
+        save_state(self.state, self.current_day)
+        if refresh_after:
+            self.refresh(animated=True)
 
     def get_paused_until(self) -> datetime | None:
         value = self.state.settings.paused_until

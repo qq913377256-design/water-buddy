@@ -43,7 +43,8 @@ def now_iso() -> str:
     return datetime.now().isoformat(timespec="seconds")
 
 
-def load_state() -> AppState:
+def load_state(day: str | None = None) -> AppState:
+    target_day = day or today_key()
     if not STATE_PATH.exists():
         return AppState()
 
@@ -53,7 +54,7 @@ def load_state() -> AppState:
         return AppState()
 
     settings_raw = raw.get("settings", {})
-    entries_raw = raw.get("entries", {}).get(today_key(), [])
+    entries_raw = raw.get("entries", {}).get(target_day, [])
     settings_defaults = asdict(Settings())
     safe_settings = {key: settings_raw.get(key, value) for key, value in settings_defaults.items()}
     settings = Settings(**safe_settings)
@@ -66,7 +67,8 @@ def load_state() -> AppState:
     return AppState(settings=settings, entries=entries)
 
 
-def save_state(state: AppState) -> None:
+def save_state(state: AppState, day: str | None = None) -> None:
+    target_day = day or today_key()
     APP_DIR.mkdir(parents=True, exist_ok=True)
     existing: dict = {}
     if STATE_PATH.exists():
@@ -76,7 +78,7 @@ def save_state(state: AppState) -> None:
             existing = {}
 
     entries_by_day = existing.get("entries", {})
-    entries_by_day[today_key()] = [asdict(entry) for entry in state.entries]
+    entries_by_day[target_day] = [asdict(entry) for entry in state.entries]
     payload = {
         "settings": asdict(state.settings),
         "entries": entries_by_day,
