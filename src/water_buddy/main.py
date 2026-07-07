@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
 )
 
 from water_buddy.config import DRINK_AMOUNT_OPTIONS, DrinkEntry, load_state, now_iso, save_state, today_key, total_today_ml
+from water_buddy.excel_log import sync_water_log
 from water_buddy.startup import is_startup_enabled, set_startup_enabled
 
 
@@ -251,6 +252,7 @@ class WaterBuddyWindow(QMainWindow):
         self.setup_tray()
         self.setup_timer()
         self.refresh(animated=False)
+        self.sync_excel_log()
 
     def setup_ui(self) -> None:
         root = QWidget()
@@ -460,6 +462,7 @@ class WaterBuddyWindow(QMainWindow):
         self.state.settings.remind_every_minutes = self.interval_input.value()
         save_state(self.state, self.current_day)
         self.refresh(animated=True)
+        self.sync_excel_log(show_error=True)
 
     def select_amount(self, amount: int) -> None:
         self.ensure_today()
@@ -492,6 +495,7 @@ class WaterBuddyWindow(QMainWindow):
         save_state(self.state, self.current_day)
         self.next_reminder_at = datetime.now() + timedelta(minutes=self.state.settings.remind_every_minutes)
         self.refresh(animated=True)
+        self.sync_excel_log(show_error=True)
 
     def pause_reminders(self) -> None:
         self.ensure_today()
@@ -553,8 +557,14 @@ class WaterBuddyWindow(QMainWindow):
         self.state.settings = previous_settings
         self.next_reminder_at = datetime.now() + timedelta(minutes=self.state.settings.remind_every_minutes)
         save_state(self.state, self.current_day)
+        self.sync_excel_log()
         if refresh_after:
             self.refresh(animated=True)
+
+    def sync_excel_log(self, show_error: bool = False) -> None:
+        synced = sync_water_log(self.state, self.current_day)
+        if show_error and not synced:
+            self.hint_label.setText("Excel文件正在打开，稍后再同步")
 
     def get_paused_until(self) -> datetime | None:
         value = self.state.settings.paused_until

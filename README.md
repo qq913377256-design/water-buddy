@@ -15,6 +15,7 @@ Windows 喝水小助手。轻提醒、托盘常驻、可爱简约界面，使用
 - Qt 原生轻通知
 - 水位、呼吸、按钮回弹等非线性动效
 - 本地 JSON 保存配置和今日记录
+- 自动同步到 `%APPDATA%\WaterBuddy\water_log.xlsx`
 
 ## 运行
 
