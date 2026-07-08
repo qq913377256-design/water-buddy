@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Water Buddy 使用说明</title>
+  <style>
+    :root {
+      --bg: #f7fbff;
+      --panel: #ffffff;
+      --ink: #244052;
+      --muted: #66869b;
+      --line: #d8edf6;
+      --blue: #2f9fd6;
+      --blue-soft: #dcf5ff;
+      --mint: #94e6c6;
+      --pink: #ff8fb3;
+      --yellow: #ffd36e;
+      --shadow: 0 18px 46px rgba(42, 112, 150, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    code {
+      padding: 2px 7px;
+      border-radius: 7px;
+      background: #eef8fc;
+      color: #1f739c;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.92em;
+    }
+
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: 210px;
+      padding: 22px 16px;
+      background: #ffffff;
+      border-right: 1px solid var(--line);
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 8px 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 16px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50% 50% 56% 56%;
+      background: linear-gradient(180deg, #80d8ff, var(--blue));
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.45);
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav a:hover {
+      background: #eef8fc;
+      color: var(--blue);
+    }
+
+    .main {
+      margin-left: 210px;
+    }
+
+    .wrap {
+      width: min(1040px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: 640px;
+      padding: 52px 0 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 430px;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 18px 0 16px;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 12px 28px rgba(47, 159, 214, 0.24);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .meta span {
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .app-preview {
+      position: relative;
+      min-height: 520px;
+    }
+
+    .window {
+      width: 370px;
+      margin-left: auto;
+      padding: 24px 24px 22px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+
+    .window-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .window-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .drop {
+      width: 154px;
+      height: 180px;
+      margin: 22px auto 14px;
+      border: 4px solid #a8e0f7;
+      border-radius: 58% 58% 64% 64%;
+      background: linear-gradient(180deg, #dcf5ff 0 42%, #66c7f4 42% 100%);
+      position: relative;
+      transform: rotate(45deg);
+      box-shadow: 0 14px 30px rgba(102, 199, 244, 0.22);
+    }
+
+    .drop::before,
+    .drop::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--ink);
+      top: 82px;
+      transform: rotate(-45deg);
+    }
+
+    .drop::before {
+      left: 48px;
+    }
+
+    .drop::after {
+      right: 48px;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .total-text {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .main-button {
+      width: 100%;
+      height: 52px;
+      border: 0;
+      border-radius: 24px;
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .settings {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 8px;
+      box-shadow: 0 10px 26px rgba(42, 112, 150, 0.1);
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .settings-row strong {
+      color: var(--ink);
+    }
+
+    .toast {
+      position: absolute;
+      right: 290px;
+      bottom: 46px;
+      width: 250px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+
+    .toast strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .section-head {
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .section-note {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 12px 34px rgba(42, 112, 150, 0.08);
+      padding: 24px;
+    }
+
+    .download-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: center;
+      border: 2px dashed #9bdcf7;
+      background: #ffffff;
+    }
+
+    .download-title {
+      margin: 0 0 6px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature {
+      min-height: 156px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 20px;
+    }
+
+    .feature-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      background: var(--blue-soft);
+      position: relative;
+    }
+
+    .feature:nth-child(2n) .feature-mark {
+      background: #e5fbf3;
+    }
+
+    .feature:nth-child(3n) .feature-mark {
+      background: #fff3d1;
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .req-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .req {
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 18px 10px;
+    }
+
+    .req small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .req strong {
+      font-size: 17px;
+    }
+
+    .steps {
+      counter-reset: step;
+      display: grid;
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 18px 18px 18px 62px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #ffffff;
+      font-weight: 900;
+    }
+
+    .screens {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .screen {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .screen img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .screen-fallback {
+      min-height: 230px;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #f7fbff, #e7f8ff);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .screen-caption {
+      padding: 12px 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px 18px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    details p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    .codebox {
+      overflow-x: auto;
+      border-radius: 8px;
+      background: #203746;
+      color: #d8edf6;
+      padding: 20px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .footer {
+      padding: 48px 0 56px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .window {
+        margin: 0;
+        width: min(100%, 420px);
+      }
+
+      .toast {
+        right: 0;
+        bottom: 10px;
+      }
+
+      .grid,
+      .req-grid,
+      .screens {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        width: min(100% - 32px, 1040px);
+      }
+
+      .hero {
+        padding-top: 28px;
+      }
+
+      .download-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .grid,
+      .req-grid,
+      .screens {
+        grid-template-columns: 1fr;
+      }
+
+      .app-preview {
+        min-height: 540px;
+      }
+
+      .toast {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        width: 100%;
+        margin-top: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark"></span>
+      <span>Water Buddy</span>
+    </div>
+    <nav class="nav" aria-label="页面目录">
+      <a href="#download">下载</a>
+      <a href="#features">功能介绍</a>
+      <a href="#requirements">系统要求</a>
+      <a href="#guide">使用指南</a>
+      <a href="#preview">界面预览</a>
+      <a href="#faq">常见问题</a>
+      <a href="#tech">技术实现</a>
+      <a href="#structure">项目结构</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="wrap">
+      <header class="hero">
+        <div>
+          <span class="eyebrow">Windows桌面喝水提醒工具</span>
+          <h1>Water Buddy</h1>
+          <p class="lead">一个常驻托盘的补水小助手。轻提醒、快速记录、自动生成Excel日志，适合长时间坐在电脑前工作时使用。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/qq913377256-design/water-buddy/releases" target="_blank" rel="noreferrer">下载最新版</a>
+            <a class="button" href="https://github.com/qq913377256-design/water-buddy" target="_blank" rel="noreferrer">查看源码</a>
+          </div>
+          <div class="meta">
+            <span>Python 3.10+</span>
+            <span>PySide6</span>
+            <span>本地数据</span>
+            <span>Windows 10/11</span>
+          </div>
+        </div>
+
+        <div class="app-preview" aria-label="应用界面示意">
+          <div class="window">
+            <div class="window-title">喝水小助手</div>
+            <div class="window-subtitle">轻轻提醒你补一点水</div>
+            <div class="drop"></div>
+            <div class="progress-text">今日 62%</div>
+            <div class="total-text">1000 / 1600 ml</div>
+            <button class="main-button" type="button">喝了 250 ml</button>
+            <div class="settings">
+              <div class="settings-row"><strong>每日目标</strong><span>1600 ml</span></div>
+              <div class="settings-row"><strong>单次喝水量</strong><span>100 / 150 / 250 / 300 ml</span></div>
+              <div class="settings-row"><strong>提醒间隔</strong><span>45 分钟</span></div>
+              <div class="settings-row"><strong>开机自启</strong><span>可选</span></div>
+            </div>
+          </div>
+          <div class="toast">
+            <strong>喝点水吧</strong>
+            <span>离开杯子太久了，补一小口也算数。</span>
+          </div>
+        </div>
+      </header>
+
+      <section id="download">
+        <div class="section-head">
+          <h2>下载</h2>
+          <p class="section-note">当前打包产物在本项目的`dist`目录中。发GitHubRelease后，把下载按钮指向对应版本附件即可。</p>
+        </div>
+        <div class="panel download-panel">
+          <div>
+            <p class="download-title">WaterBuddy.exe</p>
+            <p class="section-note">免安装运行，双击启动。运行后会常驻系统托盘，关闭主窗口不会退出程序。</p>
+          </div>
+          <a class="button primary" href="https://github.com/qq913377256-design/water-buddy/releases" target="_blank" rel="noreferrer">前往Release下载</a>
+        </div>
+      </section>
+
+      <section id="features">
+        <div class="section-head">
+          <h2>功能介绍</h2>
+          <p class="section-note">围绕少打扰、可长期使用、本地记录三个目标做功能取舍。</p>
+        </div>
+        <div class="grid">
+          <article class="feature">
+            <div class="feature-mark"></div>
+            <h3>今日进度</h3>
+            <p>显示当天已喝水量、目标量和完成百分比，水滴动画随进度变化。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-mark"></div>
+            <h3>快速记录</h3>
+            <p>提供100ml、150ml、250ml、300ml四个固定水量，减少输入成本。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-mark"></div>
+            <h3>定时提醒</h3>
+            <p>按自定义间隔发出Qt原生通知，提醒方式轻，不强制打断当前工作。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-mark"></div>
+            <h3>暂停提醒</h3>
+            <p>一键暂停30分钟，适合会议、专注工作或暂时离开电脑的场景。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-mark"></div>
+            <h3>系统托盘</h3>
+            <p>程序常驻托盘，可以从托盘打开窗口、记录一杯、暂停提醒或退出。</p>
+          </article>
+          <article class="feature">
+            <div class="feature-mark"></div>
+            <h3>Excel同步</h3>
+            <p>自动同步到`%APPDATA%\WaterBuddy\water_log.xlsx`，包含每日汇总和喝水明细。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="requirements">
+        <div class="section-head">
+          <h2>系统要求</h2>
+          <p class="section-note">按当前实现和打包方式整理。</p>
+        </div>
+        <div class="req-grid">
+          <div class="req"><small>操作系统</small><strong>Windows 10/11</strong></div>
+          <div class="req"><small>运行方式</small><strong>桌面应用</strong></div>
+          <div class="req"><small>数据位置</small><strong>用户目录</strong></div>
+          <div class="req"><small>源码依赖</small><strong>PySide6、openpyxl</strong></div>
+        </div>
+      </section>
+
+      <section id="guide">
+        <div class="section-head">
+          <h2>使用指南</h2>
+          <p class="section-note">普通用户下载exe即可，开发者可以从源码运行。</p>
+        </div>
+        <ol class="steps">
+          <li><strong>启动程序</strong><br>双击`WaterBuddy.exe`。如果从源码运行，先安装依赖，再执行`water-buddy`命令。</li>
+          <li><strong>设置目标</strong><br>在主窗口设置每日目标、单次喝水量和提醒间隔。默认目标是1600ml，默认提醒间隔是45分钟。</li>
+          <li><strong>记录喝水</strong><br>选择常用水量后点击主按钮，今日进度、水滴动画和Excel日志会一起更新。</li>
+          <li><strong>暂停提醒</strong><br>需要专注或开会时点击暂停30分钟。安静时段内不会主动提醒。</li>
+          <li><strong>查看数据</strong><br>打开`%APPDATA%\WaterBuddy\state.json`或`water_log.xlsx`可以查看本地记录。</li>
+        </ol>
+      </section>
+
+      <section id="preview">
+        <div class="section-head">
+          <h2>界面预览</h2>
+          <p class="section-note">把真实截图放到`docs/assets`后，替换下面图片路径即可。</p>
+        </div>
+        <div class="screens">
+          <figure class="screen">
+            <div class="screen-media" data-src="assets/main-window.png">
+              <div class="screen-fallback">主窗口截图<br><code>docs/assets/main-window.png</code></div>
+            </div>
+            <figcaption class="screen-caption">主窗口：今日进度、喝水按钮、目标和提醒设置。</figcaption>
+          </figure>
+          <figure class="screen">
+            <div class="screen-media" data-src="assets/tray-menu.png">
+              <div class="screen-fallback">托盘菜单截图<br><code>docs/assets/tray-menu.png</code></div>
+            </div>
+            <figcaption class="screen-caption">系统托盘：打开、记录、暂停、退出。</figcaption>
+          </figure>
+          <figure class="screen">
+            <div class="screen-media" data-src="assets/notification.png">
+              <div class="screen-fallback">提醒通知截图<br><code>docs/assets/notification.png</code></div>
+            </div>
+            <figcaption class="screen-caption">提醒通知：轻量提示，不强制抢占屏幕。</figcaption>
+          </figure>
+          <figure class="screen">
+            <div class="screen-media" data-src="assets/excel-log.png">
+              <div class="screen-fallback">Excel日志截图<br><code>docs/assets/excel-log.png</code></div>
+            </div>
+            <figcaption class="screen-caption">Excel日志：每日汇总和喝水明细自动同步。</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="section-head">
+          <h2>常见问题</h2>
+        </div>
+        <div class="faq">
+          <details open>
+            <summary>关闭窗口后程序是不是退出了？</summary>
+            <p>不会。关闭主窗口后程序会留在系统托盘里继续提醒，需要退出时从托盘菜单选择退出。</p>
+          </details>
+          <details>
+            <summary>数据保存在哪里？</summary>
+            <p>配置和记录保存在`%APPDATA%\WaterBuddy\state.json`，Excel日志保存在`%APPDATA%\WaterBuddy\water_log.xlsx`。</p>
+          </details>
+          <details>
+            <summary>为什么Excel没有更新？</summary>
+            <p>如果Excel文件正在被打开，程序可能无法写入。关闭文件后再记录一次喝水即可同步。</p>
+          </details>
+          <details>
+            <summary>支持Mac或Linux吗？</summary>
+            <p>当前定位是Windows桌面工具，托盘和开机自启都按Windows环境实现。</p>
+          </details>
+        </div>
+      </section>
+
+      <section id="tech">
+        <div class="section-head">
+          <h2>技术实现</h2>
+          <p class="section-note">核心是PySide6桌面UI、本地JSON状态、openpyxl日志同步和PyInstaller打包。</p>
+        </div>
+        <div class="grid">
+          <article class="feature">
+            <h3>UI入口</h3>
+            <p>`src/water_buddy/main.py`负责窗口、托盘、提醒定时器和交互。</p>
+          </article>
+          <article class="feature">
+            <h3>本地状态</h3>
+            <p>`src/water_buddy/config.py`负责读取和保存每日记录、目标、提醒间隔和暂停状态。</p>
+          </article>
+          <article class="feature">
+            <h3>Excel日志</h3>
+            <p>`src/water_buddy/excel_log.py`负责每日汇总、喝水明细和基础表格格式。</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="structure">
+        <div class="section-head">
+          <h2>项目结构</h2>
+        </div>
+        <pre class="codebox">water-buddy/
+├── src/water_buddy/
+│   ├── main.py          # 桌面窗口、托盘、提醒
+│   ├── config.py        # 本地状态和日期记录
+│   ├── excel_log.py     # Excel日志同步
+│   └── startup.py       # Windows开机自启
+├── tests/               # 配置和Excel日志测试
+├── scripts/
+│   └── build_exe.ps1    # Windows打包脚本
+├── docs/
+│   └── index.html       # 在线说明页
+├── dist/WaterBuddy/
+│   └── WaterBuddy.exe   # 本地打包产物
+└── README.md</pre>
+      </section>
+
+      <footer class="footer">
+        <p>Water Buddy，轻一点提醒，少一点打扰。</p>
+      </footer>
+    </div>
+  </main>
+  <script>
+    document.querySelectorAll(".screen-media").forEach((holder) => {
+      const src = holder.getAttribute("data-src");
+      if (!src) return;
+      const image = new Image();
+      image.alt = holder.textContent.trim().replace(/\s+/g, " ");
+      image.onload = () => {
+        holder.replaceChildren(image);
+      };
+      image.src = src;
+    });
+  </script>
+</body>
+</html>
