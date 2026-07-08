@@ -187,8 +187,10 @@
     }
 
     .app-preview {
-      position: relative;
-      min-height: 520px;
+      min-height: 610px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     .window {
@@ -291,10 +293,8 @@
     }
 
     .toast {
-      position: absolute;
-      right: 290px;
-      bottom: 46px;
-      width: 250px;
+      width: 320px;
+      margin: 18px 28px 0 0;
       padding: 16px 18px;
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -468,14 +468,197 @@
       height: auto;
     }
 
-    .screen-fallback {
-      min-height: 230px;
+    .mock {
+      min-height: 260px;
+      padding: 22px;
+      background: linear-gradient(135deg, #f7fbff, #e7f8ff);
+    }
+
+    .mock-window {
+      width: min(100%, 260px);
+      margin: 0 auto;
+      padding: 18px;
+      border: 1px solid #bfe8f6;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 18px 36px rgba(42, 112, 150, 0.14);
+    }
+
+    .mock-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .mock-subtitle {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mock-drop {
+      width: 92px;
+      height: 108px;
+      margin: 16px auto 10px;
+      border: 3px solid #9bdcf7;
+      border-radius: 58% 58% 64% 64%;
+      background: linear-gradient(180deg, #dcf5ff 0 38%, #66c7f4 38% 100%);
+      transform: rotate(45deg);
+    }
+
+    .mock-progress {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .mock-total {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .mock-button {
+      height: 38px;
       display: grid;
       place-items: center;
-      padding: 24px;
-      background: linear-gradient(135deg, #f7fbff, #e7f8ff);
+      border-radius: 999px;
+      background: var(--blue);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .mock-settings {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f7fbff;
       color: var(--muted);
-      text-align: center;
+      font-size: 12px;
+    }
+
+    .mock-settings div {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .mock-desktop {
+      min-height: 216px;
+      display: grid;
+      align-items: end;
+      background: linear-gradient(180deg, #edf8fc, #dff3fb);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #cfeaf6;
+    }
+
+    .mock-taskbar {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 0 12px;
+      background: #203746;
+      color: #d8edf6;
+      font-size: 12px;
+    }
+
+    .mock-tray-menu {
+      width: 210px;
+      margin: 0 22px 12px auto;
+      border: 1px solid #cfeaf6;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 16px 34px rgba(42, 112, 150, 0.18);
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    .mock-tray-menu div {
+      padding: 9px 12px;
+      border-bottom: 1px solid #eef8fc;
+    }
+
+    .mock-tray-menu div:last-child {
+      border-bottom: 0;
+    }
+
+    .mock-notice {
+      width: min(100%, 340px);
+      margin: 70px auto 0;
+      padding: 18px;
+      border: 1px solid #cfeaf6;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 16px 34px rgba(42, 112, 150, 0.16);
+    }
+
+    .mock-notice strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .mock-notice p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .mock-notice-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mock-pill {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eef8fc;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mock-excel {
+      border: 1px solid #cfeaf6;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      font-size: 12px;
+      box-shadow: 0 12px 28px rgba(42, 112, 150, 0.1);
+    }
+
+    .mock-excel-head {
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      background: #e5fbf3;
+      color: #2b6d58;
+      font-weight: 900;
+    }
+
+    .mock-excel table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .mock-excel th,
+    .mock-excel td {
+      padding: 9px 8px;
+      border: 1px solid #eef8fc;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .mock-excel th {
+      background: #ddf4ff;
+      color: var(--ink);
     }
 
     .screen-caption {
@@ -543,11 +726,6 @@
         width: min(100%, 420px);
       }
 
-      .toast {
-        right: 0;
-        bottom: 10px;
-      }
-
       .grid,
       .req-grid,
       .screens {
@@ -575,15 +753,13 @@
       }
 
       .app-preview {
-        min-height: 540px;
+        min-height: auto;
+        align-items: center;
       }
 
       .toast {
-        position: relative;
-        right: auto;
-        bottom: auto;
         width: 100%;
-        margin-top: 18px;
+        margin: 18px 0 0;
       }
     }
   </style>
@@ -730,30 +906,101 @@
       <section id="preview">
         <div class="section-head">
           <h2>界面预览</h2>
-          <p class="section-note">把真实截图放到`docs/assets`后，替换下面图片路径即可。</p>
+          <p class="section-note">按当前版本整理的界面示意，方便用户先看清主要使用场景。</p>
         </div>
         <div class="screens">
           <figure class="screen">
-            <div class="screen-media" data-src="assets/main-window.png">
-              <div class="screen-fallback">主窗口截图<br><code>docs/assets/main-window.png</code></div>
+            <div class="mock">
+              <div class="mock-window">
+                <div class="mock-title">喝水小助手</div>
+                <div class="mock-subtitle">轻轻提醒你补一点水</div>
+                <div class="mock-drop"></div>
+                <div class="mock-progress">今日 62%</div>
+                <div class="mock-total">1000 / 1600 ml</div>
+                <div class="mock-button">喝了 250 ml</div>
+                <div class="mock-settings">
+                  <div><strong>每日目标</strong><span>1600 ml</span></div>
+                  <div><strong>单次喝水量</strong><span>250 ml</span></div>
+                  <div><strong>提醒间隔</strong><span>45 分钟</span></div>
+                </div>
+              </div>
             </div>
             <figcaption class="screen-caption">主窗口：今日进度、喝水按钮、目标和提醒设置。</figcaption>
           </figure>
           <figure class="screen">
-            <div class="screen-media" data-src="assets/tray-menu.png">
-              <div class="screen-fallback">托盘菜单截图<br><code>docs/assets/tray-menu.png</code></div>
+            <div class="mock">
+              <div class="mock-desktop">
+                <div>
+                  <div class="mock-tray-menu">
+                    <div>打开窗口</div>
+                    <div>记录一杯</div>
+                    <div>暂停 30 分钟</div>
+                    <div>退出</div>
+                  </div>
+                  <div class="mock-taskbar">
+                    <span>Water Buddy</span>
+                    <span>12:30</span>
+                  </div>
+                </div>
+              </div>
             </div>
             <figcaption class="screen-caption">系统托盘：打开、记录、暂停、退出。</figcaption>
           </figure>
           <figure class="screen">
-            <div class="screen-media" data-src="assets/notification.png">
-              <div class="screen-fallback">提醒通知截图<br><code>docs/assets/notification.png</code></div>
+            <div class="mock">
+              <div class="mock-notice">
+                <strong>喝点水吧</strong>
+                <p>离开杯子太久了，补一小口也算数。</p>
+                <div class="mock-notice-actions">
+                  <span class="mock-pill">记录 250 ml</span>
+                  <span class="mock-pill">稍后提醒</span>
+                </div>
+              </div>
             </div>
             <figcaption class="screen-caption">提醒通知：轻量提示，不强制抢占屏幕。</figcaption>
           </figure>
           <figure class="screen">
-            <div class="screen-media" data-src="assets/excel-log.png">
-              <div class="screen-fallback">Excel日志截图<br><code>docs/assets/excel-log.png</code></div>
+            <div class="mock">
+              <div class="mock-excel">
+                <div class="mock-excel-head">
+                  <span>每日汇总</span>
+                  <span>喝水明细</span>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>日期</th>
+                      <th>目标ml</th>
+                      <th>实际ml</th>
+                      <th>完成率</th>
+                      <th>杯数</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2026-07-08</td>
+                      <td>1600</td>
+                      <td>1000</td>
+                      <td>62%</td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
+                      <td>2026-07-07</td>
+                      <td>1600</td>
+                      <td>1750</td>
+                      <td>109%</td>
+                      <td>7</td>
+                    </tr>
+                    <tr>
+                      <td>2026-07-06</td>
+                      <td>1600</td>
+                      <td>1500</td>
+                      <td>94%</td>
+                      <td>6</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <figcaption class="screen-caption">Excel日志：每日汇总和喝水明细自动同步。</figcaption>
           </figure>
@@ -830,17 +1077,5 @@
       </footer>
     </div>
   </main>
-  <script>
-    document.querySelectorAll(".screen-media").forEach((holder) => {
-      const src = holder.getAttribute("data-src");
-      if (!src) return;
-      const image = new Image();
-      image.alt = holder.textContent.trim().replace(/\s+/g, " ");
-      image.onload = () => {
-        holder.replaceChildren(image);
-      };
-      image.src = src;
-    });
-  </script>
 </body>
 </html>
